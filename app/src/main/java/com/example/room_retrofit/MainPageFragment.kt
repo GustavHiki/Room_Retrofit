@@ -56,7 +56,7 @@ class MainPageFragment : Fragment() {
     private fun initAdapter(posts: List<PikabuPostModel>) {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.setHasFixedSize(true)
-        pikabuPostAdapter = PikabuPostAdapter(requireContext(), posts)
+        pikabuPostAdapter = PikabuPostAdapter(requireContext(), posts, fragmentManager!!)
 
         binding.recyclerView.adapter = pikabuPostAdapter
     }
