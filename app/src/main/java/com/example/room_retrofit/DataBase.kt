@@ -2,22 +2,21 @@ package com.example.room_retrofit
 
 import android.content.Context
 import androidx.room.*
-import androidx.sqlite.db.SupportSQLiteOpenHelper
 
-@Database(entities = [PikabuPostModel::class], version = 1)
-abstract class DataBaseRepository : RoomDatabase() {
+@Database(entities = [PikabuPostModel::class], version = 1,exportSchema = false)
+abstract class DataBase : RoomDatabase() {
 
     abstract fun postDao(): PikabuPostDao
 
     companion object {
 
-        private var INSTANCE: DataBaseRepository? = null
+        private var INSTANCE: DataBase? = null
 
-        fun getDatabase(context: Context): DataBaseRepository {
+        fun getDatabase(context: Context): DataBase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    DataBaseRepository::class.java,
+                    DataBase::class.java,
                     "pikabu_posts_database"
                 ).build()
                 INSTANCE = instance

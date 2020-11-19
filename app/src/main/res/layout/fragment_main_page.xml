@@ -11,5 +11,5 @@
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="138dp"
         tools:layout_editor_absoluteY="127dp"
-        tools:listitem="@layout/pikabu_post" />
+        tools:listitem="@layout/item_pikabu_post" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,27 +1,22 @@
 package com.example.room_retrofit
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class PikabuPostsViewModel : ViewModel() {
 
-    private var allPikabuPosts: MutableLiveData<List<PikabuPostModel>> = MutableLiveData()
+    private var pikabuPosts: LiveData<List<PikabuPostModel>> = MutableLiveData()
 
-    init {
-        allPikabuPosts = PostsRepository.getAllPosts()
+    fun getPikabuPosts(): LiveData<List<PikabuPostModel>> {
+        return pikabuPosts
     }
 
-    fun getAllPikabuPosts(): LiveData<List<PikabuPostModel>> {
-        return allPikabuPosts
+    fun getLiveDataPostsCountInDb(): LiveData<Long>{
+        return PostsRepository.getLiveDataPostsCountInDb()
     }
 
-    fun saveData(){
-        PostsRepository.
-    }
-
-    fun setAllPikabuPosts(allPikabuPosts: List<PikabuPostModel>) {
-        this.allPikabuPosts.value = allPikabuPosts
+    fun loadPosts(countPostsInDb : Long){
+        pikabuPosts = PostsRepository.loadPosts(countPostsInDb)
     }
 }

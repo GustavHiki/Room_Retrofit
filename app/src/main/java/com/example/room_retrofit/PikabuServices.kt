@@ -6,5 +6,5 @@ import retrofit2.http.GET
 interface PikabuServices {
 
     @GET("page/interview/mobile-app/test-api/feed.php")
-    fun getAllPosts(): Call<List<PikabuPostModel>>
+    fun getPosts(): Call<List<PikabuPostModel>>
 }

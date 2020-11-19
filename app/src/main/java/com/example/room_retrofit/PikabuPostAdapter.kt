@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 
 class PikabuPostAdapter(context: Context, posts: List<PikabuPostModel>? = listOf()) :
     RecyclerView.Adapter<PikabuPostAdapter.PikabuPostHolder>() {
@@ -23,30 +23,34 @@ class PikabuPostAdapter(context: Context, posts: List<PikabuPostModel>? = listOf
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PikabuPostHolder {
         val viewHolder = LayoutInflater.from(parent.context)
-            .inflate(R.layout.pikabu_post, parent, false)
+            .inflate(R.layout.item_pikabu_post, parent, false)
         return PikabuPostHolder(viewHolder)
     }
 
     override fun onBindViewHolder(holder: PikabuPostHolder, position: Int) {
         val currentPost = posts?.get(position)
-        holder.tvBody.text = currentPost?.body
         holder.tvTitle.text = currentPost?.title
-
-        holder.llImages.removeAllViews()
+        holder.tvBody.text = currentPost?.body
+        holder.llImages.removeAllViews() // cleaning container cause some images not deleted
         if (currentPost?.images != null) {
-            for (url in currentPost.images!!) {
-                var iv = ImageView(context)
-                Glide
-                    .with(context)
-                    .load(url)
-                    .into(iv)
-                holder.llImages.addView(iv)
-            }
+            loadImagesToContainer(holder.llImages, currentPost.images!!)
         }
+    }
 
+    private fun loadImagesToContainer(container: LinearLayout, images: List<String>) {
+        for (image in images) {
+            val imageView = ImageView(context)
+            Glide
+                .with(context)
+                .load(image)
+                .into(imageView)
+            container.addView(imageView)
+        }
     }
 
     override fun getItemCount(): Int {
+        if (posts == null || posts?.isEmpty()!!)
+            return 0
         return posts!!.size
     }
 
@@ -59,12 +63,18 @@ class PikabuPostAdapter(context: Context, posts: List<PikabuPostModel>? = listOf
         val tvTitle: TextView
         val tvBody: TextView
         val llImages: LinearLayout
+        val clContainer: ConstraintLayout
 
         init {
             tvTitle = itemView.findViewById(R.id.tv_title)
             tvBody = itemView.findViewById(R.id.tv_body)
-//            imageView = itemView.findViewById(R.id.imageView)
             llImages = itemView.findViewById(R.id.llImages)
+
+            clContainer = itemView.findViewById(R.id.cl_container)
+            clContainer.setOnClickListener({
+
+            })
+
         }
     }
 }

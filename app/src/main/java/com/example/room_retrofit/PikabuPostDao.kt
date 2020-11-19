@@ -1,5 +1,6 @@
 package com.example.room_retrofit
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -9,14 +10,17 @@ import androidx.room.Query
 interface PikabuPostDao {
 
     @Query("SELECT * FROM post_table ORDER BY id")
-    fun getAllPosts(): List<PikabuPostModel>
+    fun getAllPosts(): LiveData<List<PikabuPostModel>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(postModel: PikabuPostModel)
+    @Query("SELECT COUNT(*) FROM post_table ")
+    fun getPostsCount(): LiveData<Long>
 
-//    @Query("INSERT INTO post_table $postModel")
-//    suspend fun insert(postModel: PikabuPostModel)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(postModel: PikabuPostModel)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(postModel: List<PikabuPostModel>)
 
     @Query("DELETE FROM post_table")
-    suspend fun deleteAll()
+    fun deleteAll()
 }
