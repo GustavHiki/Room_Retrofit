@@ -8,7 +8,7 @@
     android:layout_margin="10dp"
     android:background="@drawable/style_rounded_edges_viewed"
     android:elevation="10dp"
-    android:padding="10dp">
+    android:padding="5dp">
 
 
         <TextView
@@ -47,5 +47,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_body_post" />
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="40dp"
+            android:layout_height="37dp"
+            android:text="+"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="40dp"
+            android:layout_height="37dp"
+            android:text="-"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

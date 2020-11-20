@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,19 +30,22 @@ class MainPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeOnPostsCountInDb()
+//        observeOnPostsCountInDb()
+        viewModel.loadPostsFromInternet()
+        observeOnPosts()
+        initBtnShowSavedPosts()
     }
 
     private fun observeOnPostsCountInDb() {
-        val liveDataCountPostsInDb = viewModel.getLiveDataPostsCountInDb()
-
-        liveDataCountPostsInDb.observe(viewLifecycleOwner, object : Observer<Long> {
-            override fun onChanged(value: Long) {
-                viewModel.loadPosts(value)
-                observeOnPosts()
-                liveDataCountPostsInDb.removeObserver(this)
-            }
-        })
+//        val liveDataCountPostsInDb = viewModel.getLiveDataPostsCountInDb()
+//
+//        liveDataCountPostsInDb.observe(viewLifecycleOwner, object : Observer<Long> {
+//            override fun onChanged(value: Long) {
+//                viewModel.loadPosts(value)
+//                observeOnPosts()
+//                liveDataCountPostsInDb.removeObserver(this)
+//            }
+//        })
     }
 
     private fun observeOnPosts() {
@@ -53,10 +57,21 @@ class MainPageFragment : Fragment() {
     }
 
     private fun initAdapter(posts: List<PikabuPostModel>) {
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerViewPosts.layoutManager = LinearLayoutManager(context)
+        binding.recyclerViewPosts.setHasFixedSize(true)
         pikabuPostAdapter = PikabuPostAdapter(requireContext(), posts, requireFragmentManager())
 
-        binding.recyclerView.adapter = pikabuPostAdapter
+        binding.recyclerViewPosts.adapter = pikabuPostAdapter
+    }
+
+    private fun initBtnShowSavedPosts(){
+        binding.btnShowSavedPosts.setOnClickListener {
+            requireFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, SavedPostsFragment())
+                .addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit()
+        }
     }
 }

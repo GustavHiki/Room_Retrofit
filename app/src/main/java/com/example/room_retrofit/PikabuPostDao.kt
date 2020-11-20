@@ -1,10 +1,7 @@
 package com.example.room_retrofit
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface PikabuPostDao {
@@ -24,6 +21,12 @@ interface PikabuPostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(postModel: List<PikabuPostModel>)
 
+    @Query("SELECT EXISTS(SELECT id FROM post_table WHERE id = :id)")
+    fun isExistPostInDb(id: Long): LiveData<Boolean>
+
     @Query("DELETE FROM post_table")
     fun deleteAll()
+
+    @Query("DELETE FROM post_table WHERE id = :id")
+    fun delete(id: Long)
 }
