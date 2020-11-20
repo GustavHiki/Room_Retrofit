@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.room_retrofit.databinding.FragmentPikabuPostBinding
-import com.example.room_retrofit.databinding.ItemPikabuPostBinding
 import com.google.gson.Gson
 
 class PikabuPostFragment : Fragment() {
 
     private lateinit var binding: FragmentPikabuPostBinding
+    private lateinit var viewModel: PikabuPostsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,6 +23,7 @@ class PikabuPostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPikabuPostBinding.inflate(layoutInflater, container, false)
+        viewModel = ViewModelProvider(this).get(PikabuPostsViewModel::class.java)
         return binding.root
     }
 
@@ -33,13 +35,14 @@ class PikabuPostFragment : Fragment() {
     private fun initView(bundle: Bundle?){
         if (bundle == null)
             return
+        viewModel.setViewedPost(bundle.getString("id")?.toLong(), true)
         binding.tvTitlePost.text = bundle.getString("title")
         binding.tvBodyPost.text = bundle.getString("body")
         loadImagesToContainer(binding.imagesContainer,
             getStringsListFromJson(bundle.getString("imagesUrl")))
     }
 
-    fun getStringsListFromJson(value: String?) =
+    private fun getStringsListFromJson(value: String?) =
         Gson().fromJson(value, Array<String>::class.java).toList()
 
     private fun loadImagesToContainer(container: LinearLayout, images: List<String>) {

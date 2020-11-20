@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.room_retrofit.databinding.FragmentMainPageBinding
 
@@ -56,7 +55,7 @@ class MainPageFragment : Fragment() {
     private fun initAdapter(posts: List<PikabuPostModel>) {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.setHasFixedSize(true)
-        pikabuPostAdapter = PikabuPostAdapter(requireContext(), posts, fragmentManager!!)
+        pikabuPostAdapter = PikabuPostAdapter(requireContext(), posts, requireFragmentManager())
 
         binding.recyclerView.adapter = pikabuPostAdapter
     }

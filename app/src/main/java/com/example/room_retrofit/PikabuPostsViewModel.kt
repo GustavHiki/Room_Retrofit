@@ -19,4 +19,8 @@ class PikabuPostsViewModel : ViewModel() {
     fun loadPosts(countPostsInDb : Long){
         pikabuPosts = PostsRepository.loadPosts(countPostsInDb)
     }
+
+    fun setViewedPost(id: Long?, isViewed: Boolean){
+        PostsRepository.updateViewedPost(id, isViewed)
+    }
 }

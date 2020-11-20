@@ -2,10 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/child_fragment_container"
+    android:id="@+id/post_fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CFCFCF">
+    android:layout_margin="10dp"
+    android:background="@drawable/style_rounded_edges_viewed"
+    android:elevation="10dp"
+    android:padding="10dp">
 
 
         <TextView

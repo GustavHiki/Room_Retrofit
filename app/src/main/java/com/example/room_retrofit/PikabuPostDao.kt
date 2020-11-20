@@ -18,6 +18,9 @@ interface PikabuPostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(postModel: PikabuPostModel)
 
+    @Query("UPDATE post_table SET isViewed = :isViewed WHERE id = :id")
+    fun updateViewedPost(id: Long, isViewed: Boolean)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(postModel: List<PikabuPostModel>)
 
