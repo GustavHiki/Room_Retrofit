@@ -12,10 +12,13 @@ import com.bumptech.glide.Glide
 import com.example.room_retrofit.databinding.FragmentPikabuPostBinding
 import com.google.gson.Gson
 
-class PikabuPostFragment : Fragment() {
+class PikabuPostFragment(private var postId: Long) : Fragment() {
 
     private lateinit var binding: FragmentPikabuPostBinding
     private lateinit var viewModel: PikabuPostsViewModel
+
+    private lateinit var imagesUrl: List<String>
+//    private var postId: Long? = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +33,24 @@ class PikabuPostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(arguments)
+        buttonsSetOnClickListener()
+    }
+
+    private fun buttonsSetOnClickListener(){
+        binding.btnSaveToDb.setOnClickListener{
+            viewModel.insertPostInDb(
+                PikabuPostModel(
+                    postId,
+                    binding.tvTitlePost.text.toString(),
+                    binding.tvBodyPost.text.toString(),
+                    true,
+                    imagesUrl)
+            )
+        }
+
+        binding.btnDeleteFromDb.setOnClickListener{
+            viewModel.deletePostFromDb(binding.tvTitlePost.text.toString())
+        }
     }
 
     private fun initView(bundle: Bundle?){
@@ -38,8 +59,8 @@ class PikabuPostFragment : Fragment() {
         viewModel.setViewedPost(bundle.getString("id")?.toLong(), true)
         binding.tvTitlePost.text = bundle.getString("title")
         binding.tvBodyPost.text = bundle.getString("body")
-        loadImagesToContainer(binding.imagesContainer,
-            getStringsListFromJson(bundle.getString("imagesUrl")))
+        imagesUrl = getStringsListFromJson(bundle.getString("imagesUrl"))
+        loadImagesToContainer(binding.imagesContainer, imagesUrl)
     }
 
     private fun getStringsListFromJson(value: String?) =

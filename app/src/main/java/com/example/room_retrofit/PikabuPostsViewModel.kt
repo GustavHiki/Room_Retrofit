@@ -20,6 +20,22 @@ class PikabuPostsViewModel : ViewModel() {
         pikabuPosts = PostsRepository.loadPosts(countPostsInDb)
     }
 
+    fun loadPostsFromDb(){
+        pikabuPosts = PostsRepository.getPostsFromDb()
+    }
+
+    fun loadPostsFromInternet(){
+        pikabuPosts = PostsRepository.getAndSavePostsFromInternet()
+    }
+
+    fun insertPostInDb(post: PikabuPostModel){
+        PostsRepository.insertPostToDb(post)
+    }
+
+    fun deletePostFromDb(title: String){
+        PostsRepository.deletePostFromDb(title)
+    }
+
     fun setViewedPost(id: Long?, isViewed: Boolean){
         PostsRepository.updateViewedPost(id, isViewed)
     }

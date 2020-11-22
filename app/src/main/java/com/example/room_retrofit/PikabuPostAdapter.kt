@@ -18,7 +18,7 @@ import com.google.gson.Gson
 
 class PikabuPostAdapter(
     private val context: Context,
-    private val posts: List<PikabuPostModel>? = listOf(),
+    private val posts: List<PikabuPostModel> = listOf(),
     private val fragmentManager: FragmentManager
 ) :
     RecyclerView.Adapter<PikabuPostAdapter.PikabuPostHolder>() {
@@ -30,17 +30,17 @@ class PikabuPostAdapter(
     }
 
     override fun onBindViewHolder(holder: PikabuPostHolder, position: Int) {
-        initHolder(holder, posts?.get(position))
+        initHolder(holder, posts.get(position))
     }
 
-    private fun initHolder(holder: PikabuPostHolder, currentPost: PikabuPostModel?) {
-        holder.id = currentPost?.id
-        holder.tvTitle.text = currentPost?.title
-        holder.tvBody.text = currentPost?.body
-        holder.setViewedPost(currentPost?.isViewed)
+    private fun initHolder(holder: PikabuPostHolder, currentPost: PikabuPostModel) {
+        holder.id = currentPost.id
+        holder.tvTitle.text = currentPost.title
+        holder.tvBody.text = currentPost.body
+        holder.setViewedPost(currentPost.isViewed)
 
         holder.llImages.removeAllViews() // cleaning container cause some images not deleted
-        if (currentPost?.images != null) {
+        if (currentPost.images != null) {
             loadImagesToContainer(holder.llImages, currentPost.images)
             holder.imagesUrl = currentPost.images
         }
@@ -76,7 +76,7 @@ class PikabuPostAdapter(
         val llImages: LinearLayout = itemView.findViewById(R.id.llImages)
         val clContainer: ConstraintLayout = itemView.findViewById(R.id.item_pikabu_post)
         var imagesUrl: List<String>? = emptyList()
-        var id: Long? = null
+        var id: Long = 0
 
         init {
             clContainer.setOnClickListener {
@@ -94,7 +94,7 @@ class PikabuPostAdapter(
         }
 
         private fun navigateToPikabuPostFragment(manager: FragmentManager) {
-            val pikabuPostFragment = PikabuPostFragment()
+            val pikabuPostFragment = PikabuPostFragment(id)
 
             pikabuPostFragment.arguments = getBundle()
 

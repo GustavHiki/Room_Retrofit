@@ -48,4 +48,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_body_post" />
 
+        <Button
+            android:id="@+id/btn_save_to_db"
+            android:layout_width="44dp"
+            android:layout_height="45dp"
+            android:text="+"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_delete_from_db"
+            android:layout_width="42dp"
+            android:layout_height="45dp"
+            android:text="-"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

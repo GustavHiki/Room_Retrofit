@@ -1,10 +1,7 @@
 package com.example.room_retrofit
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface PikabuPostDao {
@@ -26,4 +23,8 @@ interface PikabuPostDao {
 
     @Query("DELETE FROM post_table")
     fun deleteAll()
+
+    @Query("DELETE FROM post_table WHERE title = :title")
+    fun delete(title: String)
+
 }

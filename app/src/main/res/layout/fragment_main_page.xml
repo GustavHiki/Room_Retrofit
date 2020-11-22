@@ -6,10 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_pikabu_post" />
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="52dp"
+        tools:layout_editor_absoluteY="184dp">
 
+        <Button
+            android:id="@+id/btn_saved_post_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="saved posts" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_pikabu_post" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

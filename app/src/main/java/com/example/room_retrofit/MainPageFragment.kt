@@ -29,7 +29,19 @@ class MainPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeOnPostsCountInDb()
+//        observeOnPostsCountInDb()
+        viewModel.loadPostsFromInternet()
+        observeOnPosts()
+        buttonsSetOnClickListener()
+    }
+
+    private fun buttonsSetOnClickListener(){
+        binding.btnSavedPostFragment.setOnClickListener{
+            requireFragmentManager().beginTransaction()
+                .replace(R.id.container, SavedPostsFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun observeOnPostsCountInDb() {

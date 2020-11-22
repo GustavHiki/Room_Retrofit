@@ -28,21 +28,21 @@ object PostsRepository {
         return pikabuPostDao.getPostsCount()
     }
 
-    private fun getPostsFromDb(): LiveData<List<PikabuPostModel>> {
-        Log.d("test123", "getPostsFromDb")
+    fun getPostsFromDb(): LiveData<List<PikabuPostModel>> {
+        Log.i("test123", "getPostsFromDb")
 
         return pikabuPostDao.getAllPosts()
     }
 
-    private fun getAndSavePostsFromInternet(): MutableLiveData<List<PikabuPostModel>> {
-        Log.d("test123", "getAllPostsFromInternet")
+    fun getAndSavePostsFromInternet(): MutableLiveData<List<PikabuPostModel>> {
+        Log.i("test123", "getAllPostsFromInternet")
         val result: MutableLiveData<List<PikabuPostModel>> = MutableLiveData()
 
         retrofitClient.getPosts().enqueue(object : Callback<List<PikabuPostModel>> {
             override fun onResponse(call: Call<List<PikabuPostModel>>, response: Response<List<PikabuPostModel>>) {
 
                 result.value = getModelListInitialized(response.body())
-                insertPostsToDb(response.body())
+//                insertPostsToDb(response.body())
             }
             private fun getModelListInitialized(model: List<PikabuPostModel>?): List<PikabuPostModel>{
                 if (model == null)
@@ -65,6 +65,22 @@ object PostsRepository {
             return
         doAsync {
             pikabuPostDao.insertAll(posts)
+        }
+    }
+
+    fun insertPostToDb(post: PikabuPostModel?) {
+        if(post == null)
+            return
+        doAsync {
+            pikabuPostDao.insert(post)
+        }
+    }
+
+    fun deletePostFromDb(title: String?) {
+        if(title == null)
+            return
+        doAsync {
+            pikabuPostDao.delete(title)
         }
     }
 
