@@ -24,7 +24,8 @@ interface PikabuPostDao {
     @Query("DELETE FROM post_table")
     fun deleteAll()
 
-    @Query("DELETE FROM post_table WHERE title = :title")
-    fun delete(title: String)
+    @Query("DELETE FROM post_table WHERE id = :id")
+    fun deletePostById(id: Long)
+
 
 }

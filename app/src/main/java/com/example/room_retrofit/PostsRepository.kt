@@ -76,11 +76,9 @@ object PostsRepository {
         }
     }
 
-    fun deletePostFromDb(title: String?) {
-        if(title == null)
-            return
+    fun deletePostFromDb(id: Long) {
         doAsync {
-            pikabuPostDao.delete(title)
+            pikabuPostDao.deletePostById(id)
         }
     }
 

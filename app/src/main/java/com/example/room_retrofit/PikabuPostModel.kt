@@ -7,7 +7,7 @@ import androidx.room.TypeConverters
 @Entity(tableName = "post_table")
 @TypeConverters(StringsListConverter::class)
 class PikabuPostModel(
-    @PrimaryKey(autoGenerate = true) var id: Long,
+    @PrimaryKey(autoGenerate = true) var id: Long = 0,
     var title: String,
     var body: String? = "",
     var isViewed: Boolean? = false,

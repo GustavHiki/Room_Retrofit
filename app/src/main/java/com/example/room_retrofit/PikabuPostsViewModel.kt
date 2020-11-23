@@ -12,31 +12,31 @@ class PikabuPostsViewModel : ViewModel() {
         return pikabuPosts
     }
 
-    fun getLiveDataPostsCountInDb(): LiveData<Long>{
+    fun getLiveDataPostsCountInDb(): LiveData<Long> {
         return PostsRepository.getLiveDataPostsCountInDb()
     }
 
-    fun loadPosts(countPostsInDb : Long){
+    fun loadPosts(countPostsInDb: Long) {
         pikabuPosts = PostsRepository.loadPosts(countPostsInDb)
     }
 
-    fun loadPostsFromDb(){
+    fun loadPostsFromDb() {
         pikabuPosts = PostsRepository.getPostsFromDb()
     }
 
-    fun loadPostsFromInternet(){
+    fun loadPostsFromInternet() {
         pikabuPosts = PostsRepository.getAndSavePostsFromInternet()
     }
 
-    fun insertPostInDb(post: PikabuPostModel){
+    fun insertPostInDb(post: PikabuPostModel) {
         PostsRepository.insertPostToDb(post)
     }
 
-    fun deletePostFromDb(title: String){
-        PostsRepository.deletePostFromDb(title)
+    fun deletePostFromDb(id: Long) {
+        PostsRepository.deletePostFromDb(id)
     }
 
-    fun setViewedPost(id: Long?, isViewed: Boolean){
+    fun setViewedPost(id: Long?, isViewed: Boolean) {
         PostsRepository.updateViewedPost(id, isViewed)
     }
 }

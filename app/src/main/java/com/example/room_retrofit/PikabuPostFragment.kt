@@ -1,6 +1,7 @@
 package com.example.room_retrofit
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,24 +37,25 @@ class PikabuPostFragment(private var postId: Long) : Fragment() {
         buttonsSetOnClickListener()
     }
 
-    private fun buttonsSetOnClickListener(){
-        binding.btnSaveToDb.setOnClickListener{
+    private fun buttonsSetOnClickListener() {
+        binding.btnSaveToDb.setOnClickListener {
             viewModel.insertPostInDb(
                 PikabuPostModel(
                     postId,
                     binding.tvTitlePost.text.toString(),
                     binding.tvBodyPost.text.toString(),
                     true,
-                    imagesUrl)
+                    imagesUrl
+                )
             )
         }
 
-        binding.btnDeleteFromDb.setOnClickListener{
-            viewModel.deletePostFromDb(binding.tvTitlePost.text.toString())
+        binding.btnDeleteFromDb.setOnClickListener {
+            viewModel.deletePostFromDb(postId)
         }
     }
 
-    private fun initView(bundle: Bundle?){
+    private fun initView(bundle: Bundle?) {
         if (bundle == null)
             return
         viewModel.setViewedPost(bundle.getString("id")?.toLong(), true)
