@@ -90,4 +90,8 @@ object PostsRepository {
         }
     }
 
+    fun isPostInDb(id: Long): LiveData<Boolean> {
+        return pikabuPostDao.isPostInDb(id)
+    }
+
 }

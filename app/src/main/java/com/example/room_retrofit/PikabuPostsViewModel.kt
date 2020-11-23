@@ -39,4 +39,8 @@ class PikabuPostsViewModel : ViewModel() {
     fun setViewedPost(id: Long?, isViewed: Boolean) {
         PostsRepository.updateViewedPost(id, isViewed)
     }
+
+    fun isPostInDb(id: Long): LiveData<Boolean> {
+        return PostsRepository.isPostInDb(id)
+    }
 }

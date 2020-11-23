@@ -1,13 +1,13 @@
 package com.example.room_retrofit
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.room_retrofit.databinding.FragmentPikabuPostBinding
@@ -19,7 +19,7 @@ class PikabuPostFragment(private var postId: Long) : Fragment() {
     private lateinit var viewModel: PikabuPostsViewModel
 
     private lateinit var imagesUrl: List<String>
-//    private var postId: Long? = 0
+    private lateinit var isPostInDb: LiveData<Boolean>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,24 +34,34 @@ class PikabuPostFragment(private var postId: Long) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(arguments)
+        observeOnSwitchState()
         buttonsSetOnClickListener()
     }
 
-    private fun buttonsSetOnClickListener() {
-        binding.btnSaveToDb.setOnClickListener {
-            viewModel.insertPostInDb(
-                PikabuPostModel(
-                    postId,
-                    binding.tvTitlePost.text.toString(),
-                    binding.tvBodyPost.text.toString(),
-                    true,
-                    imagesUrl
-                )
-            )
-        }
+    private fun observeOnSwitchState(){
+        isPostInDb = viewModel.isPostInDb(postId)
 
-        binding.btnDeleteFromDb.setOnClickListener {
-            viewModel.deletePostFromDb(postId)
+        isPostInDb.observe(this, {
+            binding.swSaveOrDelete.isChecked = it
+        })
+    }
+
+    private fun buttonsSetOnClickListener() {
+        binding.swSaveOrDelete.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            if (isChecked) {
+                viewModel.insertPostInDb(
+                    PikabuPostModel(
+                        postId,
+                        binding.tvTitlePost.text.toString(),
+                        binding.tvBodyPost.text.toString(),
+                        true,
+                        imagesUrl
+                    )
+                )
+            } else {
+                viewModel.deletePostFromDb(postId)
+            }
         }
     }
 
