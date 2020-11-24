@@ -1,17 +1,16 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.room_retrofit.adapters.PikabuPostAdapter
+import com.example.room_retrofit.veiwModel.PikabuPostsViewModel
+import com.example.room_retrofit.R
 import com.example.room_retrofit.databinding.FragmentMainPageBinding
 
 

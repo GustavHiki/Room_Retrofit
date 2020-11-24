@@ -1,6 +1,7 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.utils
 
 import androidx.recyclerview.widget.DiffUtil
+import com.example.room_retrofit.models.PikabuPostModel
 
 class PostDiffUtils(val oldList: List<PikabuPostModel>, val newList: List<PikabuPostModel>) :
     DiffUtil.Callback() {

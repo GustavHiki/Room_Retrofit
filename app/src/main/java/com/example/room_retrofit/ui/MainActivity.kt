@@ -1,7 +1,8 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.room_retrofit.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

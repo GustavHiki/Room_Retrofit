@@ -1,4 +1,4 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.room_retrofit.models.PikabuPostModel
+import com.example.room_retrofit.veiwModel.PikabuPostsViewModel
 import com.example.room_retrofit.databinding.FragmentPikabuPostBinding
 import com.google.gson.Gson
 

@@ -1,7 +1,8 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.room_retrofit.models.PikabuPostModel
 
 @Dao
 interface PikabuPostDao {

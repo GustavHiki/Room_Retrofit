@@ -1,9 +1,12 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.veiwModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams.fromPublisher
 import androidx.lifecycle.MediatorLiveData
+import com.example.room_retrofit.models.PikabuPostModel
+import com.example.room_retrofit.network.RetrofitClient
+import com.example.room_retrofit.room.PikabuPostDao
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 

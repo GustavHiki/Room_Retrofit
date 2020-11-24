@@ -1,8 +1,9 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.example.room_retrofit.utils.StringsListConverter
 
 @Entity(tableName = "post_table")
 @TypeConverters(StringsListConverter::class)

@@ -1,9 +1,9 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.veiwModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.room_retrofit.models.PikabuPostModel
 
 class PikabuPostsViewModel : ViewModel() {
 

@@ -1,4 +1,4 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.network
 
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
