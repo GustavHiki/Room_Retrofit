@@ -2,10 +2,9 @@ package com.example.room_retrofit
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.LiveDataReactiveStreams.fromPublisher
+import androidx.lifecycle.MediatorLiveData
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 
 object PostsRepository {
@@ -16,7 +15,7 @@ object PostsRepository {
         pikabuPostDao = postDao
     }
 
-    fun loadPosts(countPostsInDb : Long): LiveData<List<PikabuPostModel>> {
+    fun loadPosts(countPostsInDb: Long): LiveData<List<PikabuPostModel>> {
         return if (countPostsInDb != 0L) {
             getPostsFromDb()
         } else
@@ -34,34 +33,26 @@ object PostsRepository {
         return pikabuPostDao.getAllPosts()
     }
 
-    fun getAndSavePostsFromInternet(): MutableLiveData<List<PikabuPostModel>> {
+    fun getAndSavePostsFromInternet(): LiveData<List<PikabuPostModel>> {
         Log.i("test123", "getAllPostsFromInternet")
-        val result: MutableLiveData<List<PikabuPostModel>> = MutableLiveData()
+        var result: MediatorLiveData<List<PikabuPostModel>> = MediatorLiveData()
 
-        retrofitClient.getPosts().enqueue(object : Callback<List<PikabuPostModel>> {
-            override fun onResponse(call: Call<List<PikabuPostModel>>, response: Response<List<PikabuPostModel>>) {
+        val sourse: LiveData<List<PikabuPostModel>> = fromPublisher(
+            retrofitClient.getPosts()
+                .subscribeOn(Schedulers.io())
+        )
 
-                result.value = getModelListInitialized(response.body())
-//                insertPostsToDb(response.body())
-            }
-            private fun getModelListInitialized(model: List<PikabuPostModel>?): List<PikabuPostModel>{
-                if (model == null)
-                    return emptyList()
-                model.forEach {
-                    it.isViewed = false
-                }
-                return model
-            }
-
-            override fun onFailure(call: Call<List<PikabuPostModel>>, t: Throwable) {
-            }
-        })
+        result.addSource(sourse) {
+            result.value = it
+            result.removeSource(sourse)
+//            insertPostsToDb(it)
+        }
 
         return result
     }
 
     fun insertPostsToDb(posts: List<PikabuPostModel>?) {
-        if(posts == null)
+        if (posts == null)
             return
         doAsync {
             pikabuPostDao.insertAll(posts)
@@ -69,7 +60,7 @@ object PostsRepository {
     }
 
     fun insertPostToDb(post: PikabuPostModel?) {
-        if(post == null)
+        if (post == null)
             return
         doAsync {
             pikabuPostDao.insert(post)
@@ -82,7 +73,7 @@ object PostsRepository {
         }
     }
 
-    fun updateViewedPost(id: Long?, isViewed: Boolean){
+    fun updateViewedPost(id: Long?, isViewed: Boolean) {
         if (id == null)
             return
         doAsync {

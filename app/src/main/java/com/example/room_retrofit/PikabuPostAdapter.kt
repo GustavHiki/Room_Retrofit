@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
@@ -49,7 +50,10 @@ RecyclerView.Adapter<PikabuPostAdapter.PikabuPostHolder>(){
     }
 
     fun setPosts(posts: List<PikabuPostModel>){
+        val utils = PostDiffUtils(postsList, posts)
+        val diffResult = DiffUtil.calculateDiff(utils)
         this.postsList = posts
+        diffResult.dispatchUpdatesTo(this)
     }
 
 	class PikabuPostHolder(itemView: View, fragmentManager: FragmentManager) :

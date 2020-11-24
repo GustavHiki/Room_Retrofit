@@ -65,10 +65,10 @@ class MainPageFragment : Fragment() {
     private fun observeOnPosts() {
         viewModel.getPikabuPosts().observe(viewLifecycleOwner, {
             if (it != null) {
-                val utils = PostDiffUtils(pikabuPostAdapter.postsList, it)
-                val diffResult = DiffUtil.calculateDiff(utils)
+//                val utils = PostDiffUtils(pikabuPostAdapter.postsList, it)
+//                val diffResult = DiffUtil.calculateDiff(utils)
                 pikabuPostAdapter.setPosts(it)
-                diffResult.dispatchUpdatesTo(pikabuPostAdapter)
+//                diffResult.dispatchUpdatesTo(pikabuPostAdapter)
             }
         })
     }
