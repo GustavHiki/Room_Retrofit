@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.room_retrofit.databinding.FragmentSavedPostsBinding
 
@@ -28,23 +29,35 @@ class SavedPostsFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initAdapter()
         viewModel.loadPostsFromDb()
         observeOnPosts()
     }
 
     private fun observeOnPosts() {
-        viewModel.getPikabuPosts().observe(viewLifecycleOwner, Observer {
+        viewModel.getPikabuPosts().observe(viewLifecycleOwner, {
             if (it != null) {
-                initAdapter(it)
+                val utils = PostDiffUtils(pikabuPostAdapter.postsList, it)
+                val diffResult = DiffUtil.calculateDiff(utils)
+                pikabuPostAdapter.setPosts(it)
+                diffResult.dispatchUpdatesTo(pikabuPostAdapter)
             }
         })
     }
 
-    private fun initAdapter(posts: List<PikabuPostModel>) {
-        binding.rvSavedPosts.layoutManager = LinearLayoutManager(context)
+    private fun initAdapter() {
+        binding.rvSavedPosts.layoutManager = LinearLayoutManager(requireContext())
         binding.rvSavedPosts.setHasFixedSize(true)
-        pikabuPostAdapter = PikabuPostAdapter(requireContext(), posts, requireFragmentManager())
-
+        pikabuPostAdapter = PikabuPostAdapter(requireFragmentManager())
         binding.rvSavedPosts.adapter = pikabuPostAdapter
+
     }
+
+//    private fun initAdapter(posts: List<PikabuPostModel>) {
+//        binding.rvSavedPosts.layoutManager = LinearLayoutManager(context)
+//        binding.rvSavedPosts.setHasFixedSize(true)
+//        pikabuPostAdapter = PikabuPostAdapter(requireContext(), posts, requireFragmentManager())
+//
+//        binding.rvSavedPosts.adapter = pikabuPostAdapter
+//    }
 }

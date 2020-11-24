@@ -1,13 +1,17 @@
 package com.example.room_retrofit
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.room_retrofit.databinding.FragmentMainPageBinding
 
 
@@ -30,6 +34,8 @@ class MainPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        observeOnPostsCountInDb()
+
+        initAdapter()
         viewModel.loadPostsFromInternet()
         observeOnPosts()
         buttonsSetOnClickListener()
@@ -57,18 +63,23 @@ class MainPageFragment : Fragment() {
     }
 
     private fun observeOnPosts() {
-        viewModel.getPikabuPosts().observe(viewLifecycleOwner, Observer {
+        viewModel.getPikabuPosts().observe(viewLifecycleOwner, {
             if (it != null) {
-                initAdapter(it)
+                val utils = PostDiffUtils(pikabuPostAdapter.postsList, it)
+                val diffResult = DiffUtil.calculateDiff(utils)
+                pikabuPostAdapter.setPosts(it)
+                diffResult.dispatchUpdatesTo(pikabuPostAdapter)
             }
         })
     }
 
-    private fun initAdapter(posts: List<PikabuPostModel>) {
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+    private fun initAdapter() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.setHasFixedSize(true)
-        pikabuPostAdapter = PikabuPostAdapter(requireContext(), posts, requireFragmentManager())
-
+        pikabuPostAdapter = PikabuPostAdapter(requireFragmentManager())
         binding.recyclerView.adapter = pikabuPostAdapter
+
+        binding.recyclerView.isNestedScrollingEnabled = true
+
     }
 }

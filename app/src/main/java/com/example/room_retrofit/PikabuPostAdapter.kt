@@ -1,7 +1,7 @@
 package com.example.room_retrofit
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +17,11 @@ import com.google.gson.Gson
 
 
 class PikabuPostAdapter(
-    private val context: Context,
-    private val posts: List<PikabuPostModel> = listOf(),
     private val fragmentManager: FragmentManager
 ) :
-    RecyclerView.Adapter<PikabuPostAdapter.PikabuPostHolder>() {
+RecyclerView.Adapter<PikabuPostAdapter.PikabuPostHolder>(){
+
+    var postsList: List<PikabuPostModel> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PikabuPostHolder {
         val viewHolder = LayoutInflater.from(parent.context)
@@ -29,47 +29,31 @@ class PikabuPostAdapter(
         return PikabuPostHolder(viewHolder, fragmentManager)
     }
 
-    override fun onBindViewHolder(holder: PikabuPostHolder, position: Int) {
-        initHolder(holder, posts.get(position))
+	override fun onBindViewHolder(holder: PikabuPostHolder, position: Int) {
+        holder.bind(postsList[position])
+	}
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
-    private fun initHolder(holder: PikabuPostHolder, currentPost: PikabuPostModel) {
-        holder.id = currentPost.id
-        holder.tvTitle.text = currentPost.title
-        holder.tvBody.text = currentPost.body
-        holder.setViewedPost(currentPost.isViewed)
-
-        holder.llImages.removeAllViews() // cleaning container cause some images not deleted
-        if (currentPost.images != null) {
-            loadImagesToContainer(holder.llImages, currentPost.images)
-            holder.imagesUrl = currentPost.images
-        }
-    }
-
-    private fun loadImagesToContainer(container: LinearLayout, images: List<String>?) {
-        if (images == null)
-            return
-        for (image in images) {
-            val imageView = ImageView(context)
-            Glide
-                .with(context)
-                .load(image)
-                .into(imageView)
-            container.addView(imageView)
-        }
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 
     override fun getItemCount(): Int {
-        if (posts == null || posts.isEmpty()) {
+        if (postsList == null || postsList.isEmpty()) {
             return 0
         }
-        return posts.size
+        return postsList.size
     }
 
-    class PikabuPostHolder(itemView: View, fragmentManager: FragmentManager) :
-        RecyclerView.ViewHolder(
-            itemView
-        ) {
+    fun setPosts(posts: List<PikabuPostModel>){
+        this.postsList = posts
+    }
+
+	class PikabuPostHolder(itemView: View, fragmentManager: FragmentManager) :
+		RecyclerView.ViewHolder(itemView) {
 
         val tvTitle: TextView = itemView.findViewById(R.id.tv_title)
         val tvBody: TextView = itemView.findViewById(R.id.tv_body)
@@ -84,13 +68,38 @@ class PikabuPostAdapter(
             }
         }
 
+        fun bind(currentPost: PikabuPostModel) {
+            id = currentPost.id
+            tvTitle.text = currentPost.title
+            tvBody.text = currentPost.body
+            setViewedPost(currentPost.isViewed)
+
+            llImages.removeAllViews() // cleaning container cause some images not deleted
+            if (currentPost.images != null) {
+                loadImagesToContainer(llImages, currentPost.images)
+                imagesUrl = currentPost.images
+            }
+        }
+
+        private fun loadImagesToContainer(container: LinearLayout, images: List<String>?) {
+            if (images == null)
+                return
+            for (image in images) {
+                val imageView = ImageView(itemView.context)
+                Glide
+                    .with(itemView.context)
+                    .load(image)
+                    .into(imageView).clearOnDetach()
+                container.addView(imageView)
+            }
+        }
+
         fun setViewedPost(isViewed: Boolean?) {
             if (isViewed == null)
                 return
 
             if (isViewed) clContainer.setBackgroundResource(R.drawable.style_rounded_edges_viewed)
             else clContainer.setBackgroundResource(R.drawable.style_rounded_edges_not_viewed)
-
         }
 
         private fun navigateToPikabuPostFragment(manager: FragmentManager) {
