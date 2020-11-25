@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.room_retrofit.adapters.PikabuPostAdapter
+import com.example.room_retrofit.ui.adapters.PikabuPostAdapter
 import com.example.room_retrofit.veiwModel.PikabuPostsViewModel
 import com.example.room_retrofit.utils.PostDiffUtils
 import com.example.room_retrofit.databinding.FragmentSavedPostsBinding
+import com.example.room_retrofit.room.DataBase
+import com.example.room_retrofit.veiwModel.PostsRepository
 
 class SavedPostsFragment : Fragment(){
     private lateinit var viewModel: PikabuPostsViewModel
@@ -54,12 +56,4 @@ class SavedPostsFragment : Fragment(){
         binding.rvSavedPosts.adapter = pikabuPostAdapter
 
     }
-
-//    private fun initAdapter(posts: List<PikabuPostModel>) {
-//        binding.rvSavedPosts.layoutManager = LinearLayoutManager(context)
-//        binding.rvSavedPosts.setHasFixedSize(true)
-//        pikabuPostAdapter = PikabuPostAdapter(requireContext(), posts, requireFragmentManager())
-//
-//        binding.rvSavedPosts.adapter = pikabuPostAdapter
-//    }
 }

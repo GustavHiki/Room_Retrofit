@@ -9,13 +9,11 @@ class PikabuPostsViewModel : ViewModel() {
 
     private var pikabuPosts: LiveData<List<PikabuPostModel>> = MediatorLiveData()
 
-    fun getPikabuPosts(): LiveData<List<PikabuPostModel>> {
-        return pikabuPosts
-    }
+    fun getPikabuPosts(): LiveData<List<PikabuPostModel>> = pikabuPosts
 
-    fun getLiveDataPostsCountInDb(): LiveData<Long> {
-        return PostsRepository.getLiveDataPostsCountInDb()
-    }
+
+    fun getLiveDataPostsCountInDb(): LiveData<Long> = PostsRepository.getLiveDataPostsCountInDb()
+
 
     fun loadPosts(countPostsInDb: Long) {
         pikabuPosts = PostsRepository.loadPosts(countPostsInDb)
@@ -41,7 +39,6 @@ class PikabuPostsViewModel : ViewModel() {
         PostsRepository.updateViewedPost(id, isViewed)
     }
 
-    fun isPostInDb(id: Long): LiveData<Boolean> {
-        return PostsRepository.isPostInDb(id)
-    }
+    fun isExistPostInDb(id: Long): LiveData<Boolean> = PostsRepository.isPostInDb(id)
+
 }

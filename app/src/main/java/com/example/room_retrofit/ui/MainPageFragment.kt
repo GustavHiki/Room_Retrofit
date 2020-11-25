@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.room_retrofit.adapters.PikabuPostAdapter
-import com.example.room_retrofit.veiwModel.PikabuPostsViewModel
+import androidx.recyclerview.widget.*
 import com.example.room_retrofit.R
+import com.example.room_retrofit.ui.adapters.PikabuPostAdapter
 import com.example.room_retrofit.databinding.FragmentMainPageBinding
+import com.example.room_retrofit.room.DataBase
+import com.example.room_retrofit.veiwModel.PikabuPostsViewModel
+import com.example.room_retrofit.veiwModel.PostsRepository
 
 
 class MainPageFragment : Fragment() {
@@ -24,7 +26,7 @@ class MainPageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        PostsRepository.initPikabuPostDao(DataBase.getDatabase(requireContext()).postDao())
         binding = FragmentMainPageBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(this).get(PikabuPostsViewModel::class.java)
         return binding.root
@@ -37,17 +39,17 @@ class MainPageFragment : Fragment() {
         initAdapter()
         viewModel.loadPostsFromInternet()
         observeOnPosts()
-        buttonsSetOnClickListener()
+//        buttonsSetOnClickListener()
     }
 
-    private fun buttonsSetOnClickListener(){
-        binding.btnSavedPostFragment.setOnClickListener{
-            requireFragmentManager().beginTransaction()
-                .replace(R.id.container, SavedPostsFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-    }
+//    private fun buttonsSetOnClickListener() {
+//        binding.btnSavedPostFragment.setOnClickListener {
+//            requireFragmentManager().beginTransaction()
+//                .replace(R.id.container, SavedPostsFragment())
+//                .addToBackStack(null)
+//                .commit()
+//        }
+//    }
 
     private fun observeOnPostsCountInDb() {
         val liveDataCountPostsInDb = viewModel.getLiveDataPostsCountInDb()
@@ -74,8 +76,5 @@ class MainPageFragment : Fragment() {
         binding.recyclerView.setHasFixedSize(true)
         pikabuPostAdapter = PikabuPostAdapter(requireFragmentManager())
         binding.recyclerView.adapter = pikabuPostAdapter
-
-        binding.recyclerView.isNestedScrollingEnabled = true
-
     }
 }

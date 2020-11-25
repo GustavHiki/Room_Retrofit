@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Room_Retrofit</string>
+    <string name="internet">Internet</string>
+    <string name="database">Database</string>
 </resources>

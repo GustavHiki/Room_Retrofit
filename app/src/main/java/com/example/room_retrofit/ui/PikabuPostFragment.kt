@@ -13,15 +13,18 @@ import com.bumptech.glide.Glide
 import com.example.room_retrofit.models.PikabuPostModel
 import com.example.room_retrofit.veiwModel.PikabuPostsViewModel
 import com.example.room_retrofit.databinding.FragmentPikabuPostBinding
+import com.example.room_retrofit.room.DataBase
+import com.example.room_retrofit.veiwModel.PostsRepository
 import com.google.gson.Gson
 
-class PikabuPostFragment(private var postId: Long) : Fragment() {
+class PikabuPostFragment : Fragment() {
 
+    private var postId: Long? = 0
     private lateinit var binding: FragmentPikabuPostBinding
     private lateinit var viewModel: PikabuPostsViewModel
 
     private lateinit var imagesUrl: List<String>
-    private lateinit var isPostInDb: LiveData<Boolean>
+    private lateinit var isExistPostInDb: LiveData<Boolean>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,20 +44,20 @@ class PikabuPostFragment(private var postId: Long) : Fragment() {
     }
 
     private fun observeOnSwitchState(){
-        isPostInDb = viewModel.isPostInDb(postId)
+        if(postId != null)
+        isExistPostInDb = viewModel.isExistPostInDb(postId!!)
 
-        isPostInDb.observe(this, {
+        isExistPostInDb.observe(this, {
             binding.swSaveOrDelete.isChecked = it
         })
     }
 
     private fun buttonsSetOnClickListener() {
         binding.swSaveOrDelete.setOnCheckedChangeListener { buttonView, isChecked ->
-
             if (isChecked) {
                 viewModel.insertPostInDb(
                     PikabuPostModel(
-                        postId,
+                        postId!!,
                         binding.tvTitlePost.text.toString(),
                         binding.tvBodyPost.text.toString(),
                         true,
@@ -62,7 +65,7 @@ class PikabuPostFragment(private var postId: Long) : Fragment() {
                     )
                 )
             } else {
-                viewModel.deletePostFromDb(postId)
+                viewModel.deletePostFromDb(postId!!)
             }
         }
     }
@@ -70,9 +73,10 @@ class PikabuPostFragment(private var postId: Long) : Fragment() {
     private fun initView(bundle: Bundle?) {
         if (bundle == null)
             return
-        viewModel.setViewedPost(bundle.getString("id")?.toLong(), true)
-        binding.tvTitlePost.text = bundle.getString("title")
-        binding.tvBodyPost.text = bundle.getString("body")
+        postId = bundle.getString("id")?.toLong()
+        viewModel.setViewedPost(postId, true)
+        binding.tvTitlePost.text = bundle.getString("title", "")
+        binding.tvBodyPost.text = bundle.getString("body", "")
         imagesUrl = getStringsListFromJson(bundle.getString("imagesUrl"))
         loadImagesToContainer(binding.imagesContainer, imagesUrl)
     }

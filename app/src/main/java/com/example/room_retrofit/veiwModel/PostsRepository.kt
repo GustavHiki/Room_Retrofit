@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 
 object PostsRepository {
-    private var retrofitClient = RetrofitClient.retrofitClient
+    private var pikabuServices = RetrofitClient.pikabuServices
     private lateinit var pikabuPostDao: PikabuPostDao
 
     fun initPikabuPostDao(postDao: PikabuPostDao) {
@@ -41,7 +41,7 @@ object PostsRepository {
         var result: MediatorLiveData<List<PikabuPostModel>> = MediatorLiveData()
 
         val sourse: LiveData<List<PikabuPostModel>> = fromPublisher(
-            retrofitClient.getPosts()
+            pikabuServices.getPosts()
                 .subscribeOn(Schedulers.io())
         )
 
@@ -85,7 +85,7 @@ object PostsRepository {
     }
 
     fun isPostInDb(id: Long): LiveData<Boolean> {
-        return pikabuPostDao.isPostInDb(id)
+        return pikabuPostDao.isExistPostInDb(id)
     }
 
 }

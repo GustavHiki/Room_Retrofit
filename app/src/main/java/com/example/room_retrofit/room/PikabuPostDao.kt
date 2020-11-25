@@ -29,6 +29,6 @@ interface PikabuPostDao {
     fun deletePostById(id: Long)
 
     @Query("SELECT EXISTS(SELECT id FROM post_table WHERE id = :id)")
-    fun isPostInDb(id: Long): LiveData<Boolean>
+    fun isExistPostInDb(id: Long): LiveData<Boolean>
 
 }

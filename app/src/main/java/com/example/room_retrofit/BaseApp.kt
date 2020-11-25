@@ -6,8 +6,4 @@ import com.example.room_retrofit.veiwModel.PostsRepository
 
 class BaseApp: Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-        PostsRepository.initPikabuPostDao(DataBase.getDatabase(this).postDao())
-    }
 }

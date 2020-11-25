@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.*
 import com.example.room_retrofit.models.PikabuPostModel
 
-@Database(entities = [PikabuPostModel::class], version = 1,exportSchema = false)
+@Database(entities = [PikabuPostModel::class], version = 1, exportSchema = false)
 abstract class DataBase : RoomDatabase() {
 
     abstract fun postDao(): PikabuPostDao
