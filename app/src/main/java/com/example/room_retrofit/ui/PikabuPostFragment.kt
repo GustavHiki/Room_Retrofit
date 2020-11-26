@@ -6,23 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.room_retrofit.models.PikabuPostModel
-import com.example.room_retrofit.veiwModel.PikabuPostsViewModel
 import com.example.room_retrofit.databinding.FragmentPikabuPostBinding
-import com.example.room_retrofit.room.DataBase
-import com.example.room_retrofit.veiwModel.PostsRepository
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 
-class PikabuPostFragment : Fragment() {
+@AndroidEntryPoint
+class PikabuPostFragment : BasePostFragment() {
 
     private var postId: Long? = 0
     private lateinit var binding: FragmentPikabuPostBinding
-    private lateinit var viewModel: PikabuPostsViewModel
-
     private lateinit var imagesUrl: List<String>
     private lateinit var isExistPostInDb: LiveData<Boolean>
 
@@ -32,7 +27,6 @@ class PikabuPostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPikabuPostBinding.inflate(layoutInflater, container, false)
-        viewModel = ViewModelProvider(this).get(PikabuPostsViewModel::class.java)
         return binding.root
     }
 
@@ -40,19 +34,19 @@ class PikabuPostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView(arguments)
         observeOnSwitchState()
-        buttonsSetOnClickListener()
+        setOnClickListenerOnButtons()
     }
 
-    private fun observeOnSwitchState(){
-        if(postId != null)
-        isExistPostInDb = viewModel.isExistPostInDb(postId!!)
+    private fun observeOnSwitchState() {
+        if (postId != null)
+            isExistPostInDb = viewModel.isExistPostInDb(postId!!)
 
-        isExistPostInDb.observe(this, {
+        isExistPostInDb.observe(viewLifecycleOwner, {
             binding.swSaveOrDelete.isChecked = it
         })
     }
 
-    private fun buttonsSetOnClickListener() {
+    private fun setOnClickListenerOnButtons() {
         binding.swSaveOrDelete.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 viewModel.insertPostInDb(
@@ -94,6 +88,4 @@ class PikabuPostFragment : Fragment() {
             container.addView(imageView)
         }
     }
-
-
 }

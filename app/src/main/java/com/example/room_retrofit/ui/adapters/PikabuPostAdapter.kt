@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.room_retrofit.models.PikabuPostModel
-import com.example.room_retrofit.utils.PostDiffUtils
 import com.example.room_retrofit.R
 import com.example.room_retrofit.ui.PikabuPostFragment
 import com.google.gson.Gson

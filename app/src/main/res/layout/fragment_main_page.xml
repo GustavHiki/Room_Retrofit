@@ -14,11 +14,11 @@
         tools:layout_editor_absoluteX="52dp"
         tools:layout_editor_absoluteY="184dp">
 
-<!--        <Button-->
-<!--            android:id="@+id/btn_saved_post_fragment"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="saved posts" />-->
+        <Button
+            android:id="@+id/btn_saved_post_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="saved posts" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"

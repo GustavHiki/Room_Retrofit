@@ -1,14 +1,7 @@
 package com.example.room_retrofit.models
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.example.room_retrofit.utils.StringsListConverter
-
-@Entity(tableName = "post_table")
-@TypeConverters(StringsListConverter::class)
 class PikabuPostModel(
-    @PrimaryKey(autoGenerate = true) var id: Long = 0,
+    var id: Long = 0,
     var title: String,
     var body: String? = null,
     var isViewed: Boolean? = false,

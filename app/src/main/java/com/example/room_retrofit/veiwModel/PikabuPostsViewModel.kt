@@ -1,44 +1,49 @@
 package com.example.room_retrofit.veiwModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.*
 import com.example.room_retrofit.models.PikabuPostModel
 
-class PikabuPostsViewModel : ViewModel() {
+class PikabuPostsViewModel
+@ViewModelInject
+constructor(
+    private val repository: PostsRepository,
+    @Assisted private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
-    private var pikabuPosts: LiveData<List<PikabuPostModel>> = MediatorLiveData()
+    private var pikabuPosts: LiveData<List<PikabuPostModel>> = MutableLiveData()
 
     fun getPikabuPosts(): LiveData<List<PikabuPostModel>> = pikabuPosts
 
 
-    fun getLiveDataPostsCountInDb(): LiveData<Long> = PostsRepository.getLiveDataPostsCountInDb()
+    fun getLiveDataPostsCountInDb(): LiveData<Long> = repository.getLiveDataPostsCountInDb()
 
 
     fun loadPosts(countPostsInDb: Long) {
-        pikabuPosts = PostsRepository.loadPosts(countPostsInDb)
+        pikabuPosts = repository.loadPosts(countPostsInDb)
     }
 
     fun loadPostsFromDb() {
-        pikabuPosts = PostsRepository.getPostsFromDb()
+        pikabuPosts = repository.getPostsFromDb()
     }
 
     fun loadPostsFromInternet() {
-        pikabuPosts = PostsRepository.getAndSavePostsFromInternet()
+        pikabuPosts = repository.getAndSavePostsFromInternet()
     }
 
     fun insertPostInDb(post: PikabuPostModel) {
-        PostsRepository.insertPostToDb(post)
+        repository.insertPostToDb(post)
     }
 
     fun deletePostFromDb(id: Long) {
-        PostsRepository.deletePostFromDb(id)
+        repository.deletePostFromDb(id)
     }
 
     fun setViewedPost(id: Long?, isViewed: Boolean) {
-        PostsRepository.updateViewedPost(id, isViewed)
+        repository.updateViewedPost(id, isViewed)
     }
 
-    fun isExistPostInDb(id: Long): LiveData<Boolean> = PostsRepository.isPostInDb(id)
+    fun isExistPostInDb(id: Long): LiveData<Boolean> = repository.isPostInDb(id)
 
 }

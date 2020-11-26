@@ -4,19 +4,23 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams.fromPublisher
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.room_retrofit.models.PikabuPostModel
-import com.example.room_retrofit.network.RetrofitClient
+import com.example.room_retrofit.network.IPikabuServices
+import com.example.room_retrofit.network.NetworkMapper
+import com.example.room_retrofit.network.PostNetworkEntity
 import com.example.room_retrofit.room.PikabuPostDao
+import com.example.room_retrofit.room.CacheMapper
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 
-object PostsRepository {
-    private var pikabuServices = RetrofitClient.pikabuServices
-    private lateinit var pikabuPostDao: PikabuPostDao
-
-    fun initPikabuPostDao(postDao: PikabuPostDao) {
-        pikabuPostDao = postDao
-    }
+class PostsRepository
+    constructor(
+    private val pikabuPostDao: PikabuPostDao,
+    private val pikabuServices: IPikabuServices,
+    private val cacheMapper: CacheMapper,
+    private val networkMapper: NetworkMapper
+    ) {
 
     fun loadPosts(countPostsInDb: Long): LiveData<List<PikabuPostModel>> {
         return if (countPostsInDb != 0L) {
@@ -33,20 +37,25 @@ object PostsRepository {
     fun getPostsFromDb(): LiveData<List<PikabuPostModel>> {
         Log.i("test123", "getPostsFromDb")
 
-        return pikabuPostDao.getAllPosts()
+        val result = MutableLiveData<List<PikabuPostModel>>()
+        doAsync {
+            result.postValue(cacheMapper.mapFromEntityList(pikabuPostDao.getAllPosts()))
+        }
+
+        return result
     }
 
     fun getAndSavePostsFromInternet(): LiveData<List<PikabuPostModel>> {
         Log.i("test123", "getAllPostsFromInternet")
-        var result: MediatorLiveData<List<PikabuPostModel>> = MediatorLiveData()
+        val result: MediatorLiveData<List<PikabuPostModel>> = MediatorLiveData()
 
-        val sourse: LiveData<List<PikabuPostModel>> = fromPublisher(
+        val sourse: LiveData<List<PostNetworkEntity>> = fromPublisher(
             pikabuServices.getPosts()
                 .subscribeOn(Schedulers.io())
         )
 
         result.addSource(sourse) {
-            result.value = it
+            result.postValue(networkMapper.mapFromEntityList(it))
             result.removeSource(sourse)
 //            insertPostsToDb(it)
         }
@@ -58,7 +67,7 @@ object PostsRepository {
         if (posts == null)
             return
         doAsync {
-            pikabuPostDao.insertAll(posts)
+            pikabuPostDao.insertAll(cacheMapper.mapToEntityList(posts) )
         }
     }
 
@@ -66,7 +75,7 @@ object PostsRepository {
         if (post == null)
             return
         doAsync {
-            pikabuPostDao.insert(post)
+            pikabuPostDao.insert(cacheMapper.mapToEntity(post))
         }
     }
 

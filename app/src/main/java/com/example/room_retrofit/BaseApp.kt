@@ -1,9 +1,12 @@
 package com.example.room_retrofit
 
 import android.app.Application
-import com.example.room_retrofit.room.DataBase
-import com.example.room_retrofit.veiwModel.PostsRepository
+import dagger.hilt.android.HiltAndroidApp
 
-class BaseApp: Application() {
+@HiltAndroidApp
+class BaseApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+    }
 
 }

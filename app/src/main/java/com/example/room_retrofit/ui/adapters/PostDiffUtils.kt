@@ -1,4 +1,4 @@
-package com.example.room_retrofit.utils
+package com.example.room_retrofit.ui.adapters
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.room_retrofit.models.PikabuPostModel
