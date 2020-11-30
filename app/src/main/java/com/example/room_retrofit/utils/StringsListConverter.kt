@@ -1,4 +1,4 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.utils
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

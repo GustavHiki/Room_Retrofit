@@ -1,11 +1,12 @@
 package com.example.room_retrofit
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-class BaseApp: Application() {
-
+@HiltAndroidApp
+class BaseApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        PostsRepository.initPikabuPostDao(DataBase.getDatabase(this).postDao())
     }
+
 }

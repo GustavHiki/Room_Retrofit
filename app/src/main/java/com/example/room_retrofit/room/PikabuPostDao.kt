@@ -1,4 +1,4 @@
-package com.example.room_retrofit
+package com.example.room_retrofit.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -7,19 +7,19 @@ import androidx.room.*
 interface PikabuPostDao {
 
     @Query("SELECT * FROM post_table ORDER BY id")
-    fun getAllPosts(): LiveData<List<PikabuPostModel>>
+    fun getAllPosts(): List<PostCacheEntity>
 
     @Query("SELECT COUNT(*) FROM post_table ")
     fun getPostsCount(): LiveData<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(postModel: PikabuPostModel)
+    fun insert(postEntity: PostCacheEntity)
 
     @Query("UPDATE post_table SET isViewed = :isViewed WHERE id = :id")
     fun updateViewedPost(id: Long, isViewed: Boolean)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(postModel: List<PikabuPostModel>)
+    fun insertAll(postEntity: List<PostCacheEntity>)
 
     @Query("DELETE FROM post_table")
     fun deleteAll()
@@ -28,6 +28,6 @@ interface PikabuPostDao {
     fun deletePostById(id: Long)
 
     @Query("SELECT EXISTS(SELECT id FROM post_table WHERE id = :id)")
-    fun isPostInDb(id: Long): LiveData<Boolean>
+    fun isExistPostInDb(id: Long): LiveData<Boolean>
 
 }

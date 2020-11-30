@@ -25,5 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/item_pikabu_post" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
